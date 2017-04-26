@@ -5,20 +5,22 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 body {
   color: #404040;
   font: 400 15px/22px 'Open Sans', sans-serif;
-  margin: 0;
-  padding: 0;
   -webkit-font-smoothing: antialiased;
 }
 
 h1 {
-  font: 400 22px/60px 'Roboto', sans-serif;
-  white-space: nowrap;
-  margin: 0;
+  font: 400 22px 'Roboto', sans-serif;
 }
 
 a {
@@ -58,11 +60,46 @@ a:hover {
   z-index: -1;
 }
 
+.mapboxgl-popup {
+  max-width: 240px;
+}
+
+.mapboxgl-popup-content {
+  box-shadow: 0 3px 3px rgba(0,0,0,0.25);
+  padding: 0;
+  border-radius: 0;
+}
+
+.mapboxgl-popup-content img {
+  width: 100%;
+  border-radius: 0;
+}
+
+.mapboxgl-popup-content .popup-title {
+  text-align: center;
+  padding: 20px 10px 0 10px
+}
+
+.mapboxgl-popup-content .popup-desc {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.mapboxgl-popup-close-button {
+  right: 11px;
+  top: 5px;
+  color: white;
+  font-size: 2em;
+}
+
 .heading {
   background: #fff;
   border-bottom: 1px solid #eee;
   height: 60px;
   padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .listings {
@@ -92,12 +129,12 @@ a:hover {
   font-weight: 400;
 }
 
-.listings .item.active .title,
-.listings .item .title:hover {
+.listings .item.active .title {
   color: #8cc63f;
 }
 
-.listings .item.active {
+.listings .item.active,
+.listings .item:hover {
   background-color: #f8f8f8;
 }
 

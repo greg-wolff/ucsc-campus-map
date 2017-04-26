@@ -1,6 +1,15 @@
     // load map and data
     mapboxgl.accessToken = 'pk.eyJ1IjoiZ3dvbGZmIiwiYSI6ImNpdTgwYmZsbDAwMnkydHFtcGdqeDR4angifQ.pDNfE5XnQy3r6kvnbobn6w';
 
+    //enable remove func
+    if (!('remove' in Element.prototype)) {
+      Element.prototype.remove = function() {
+        if (this.parentNode) {
+          this.parentNode.removeChild(this);
+        }
+      };
+    }
+
     var buildings = {
         "type": "FeatureCollection",
         "features": [
@@ -521,10 +530,11 @@
           }
         ]
       };
+
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v9',
-        center: [-122.06, 36.991],
+        center: [-122.06, 36.989],
         maxBounds: [ [-122.12, 36.97],
                      [-122, 37.01] ],
         maxZoom: 18,
@@ -548,6 +558,7 @@
           'fill-outline-color': '#1a6818'
         }
       });
+      //console.log(map.getSource('locations'));
       buildLocationList(buildings);
     });
     map.on('click', function(e) {
@@ -557,8 +568,19 @@
       if (features.length) {
         var clickedPoint = features[0];
         gotoBuilding(clickedPoint);
+        popUp(clickedPoint);
+        var activeItem = document.getElementsByClassName('active');
+        if (activeItem[0]) {
+          activeItem[0].classList.remove('active');
+        }
+        var selectedFeature = clickedPoint.properties.name;
+        for (var i = 0; i < buildings.features.length; i++)
+          if (buildings.features[i].properties.name === selectedFeature)
+            selectedFeatureIndex = i;
+        var listing = document.getElementById('listing-' + selectedFeatureIndex);
+        listing.classList.add('active');
       }
-    })
+    });
 
     function buildLocationList(data) {
       for(i = 0; i < data.features.length; i++) {
@@ -578,14 +600,18 @@
         link.className = 'title';
         link.innerHTML = prop.name;
 
-        listing.addEventListener('click', function(e) {
-          var clickedListing = data.features[this.dataPosition];
-          gotoBuilding(clickedListing);
-        })
-
         var details = listing.appendChild(document.createElement('div'));
         details.innerHTML = prop.address;
 
+        listing.addEventListener('click', function(e) {
+          var clickedListing = data.features[this.dataPosition];
+          gotoBuilding(clickedListing);
+          popUp(clickedListing);
+          var activeItem = document.getElementsByClassName('active');
+          if (activeItem[0]) {
+            activeItem[0].classList.remove('active');
+          } this.classList.add('active');
+        });
       }
     }
 
@@ -595,7 +621,6 @@
       var y = arr.map(function(v) { return v[1]; })
                  .reduce(function(a, b) { return a + b; });
       return [parseFloat(x/arr.length), parseFloat(y/arr.length)];
-
     }
 
     function gotoBuilding(currentFeature) {
@@ -603,5 +628,20 @@
       map.flyTo({
         center: new mapboxgl.LngLat(center[0], center[1]),
         zoom: 17
-      })
+      });
+    }
+    function popUp(currentFeature) {
+      var popUps = document.getElementsByClassName('mapboxgl-popup');
+      if (popUps[0]) popUps[0].remove();
+      //console.log(currentFeature.geometry.coordinates);
+      var center = avg(currentFeature.geometry.coordinates[0]);
+      var popup = new mapboxgl.Popup({ closeOnClick: false, anchor: 'bottom'})
+        .setLngLat(new mapboxgl.LngLat(center[0], center[1]))
+        .setHTML('<img src="http://www.webdav.org/other/baskin-outside.jpg">' +
+                 '<h1 class="popup-title">' + currentFeature.properties.name + '</h1>' +
+                 '<h3 class="popup-desc"><i>' + currentFeature.properties.address + '</i></h3>')
+        .addTo(map);
+      popup.on("close", function(e) {
+          document.getElementsByClassName('active')[0].classList.remove('active');
+      });
     }
