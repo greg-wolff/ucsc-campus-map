@@ -16,12 +16,10 @@
           {
             "type": "Feature",
             "properties": {
+              "img": "img/jbaskin.jpg",
               "name": "Jack Baskin Engineering",
               "website": "https://www.soe.ucsc.edu/",
-              "address": "1156 High St",
-              "city": "Santa Cruz",
-              "state": "California",
-              "postalCode": "95064"
+              "address": "1156 High St"
             },
             "geometry": {
               "coordinates": [
@@ -82,11 +80,9 @@
           {
             "type": "Feature",
             "properties": {
+              "img": "img/kerrhall.jpg",
               "name": "Kerr Hall",
               "address": "Kerr Hall, Kerr Rd",
-              "city": "Santa Cruz",
-              "state": "California",
-              "postalCode": "95064"
             },
             "geometry": {
               "coordinates": [
@@ -195,11 +191,9 @@
           {
             "type": "Feature",
             "properties": {
+              "img": "img/physsci.jpg",
               "name": "Physical Sciences",
               "website": "http://pbsci.ucsc.edu/",
-              "city": "Santa Cruz",
-              "state": "California",
-              "postalCode": "95064"
             },
             "geometry": {
               "coordinates": [
@@ -348,12 +342,10 @@
           {
             "type": "Feature",
             "properties": {
+              "img": "img/selib.jpg",
               "name": "Science & Engineering Library",
               "website": "https://library.ucsc.edu/science",
               "address": "1156 High St",
-              "city": "Santa Cruz",
-              "state": "California",
-              "postalCode": "95064"
             },
             "geometry": {
               "coordinates": [
@@ -474,11 +466,9 @@
           {
             "type": "Feature",
             "properties": {
+              "img": "img/thimann.jpg",
               "name": "Thimann Labs",
               "address": "568 Steinhart Way",
-              "city": "Santa Cruz",
-              "state": "California",
-              "postalCode": "95064"
             },
             "geometry": {
               "coordinates": [
@@ -637,7 +627,7 @@
       var center = avg(currentFeature.geometry.coordinates[0]);
       var popup = new mapboxgl.Popup({ closeOnClick: false, anchor: 'bottom'})
         .setLngLat(new mapboxgl.LngLat(center[0], center[1]))
-        .setHTML('<img src="http://www.webdav.org/other/baskin-outside.jpg">' +
+        .setHTML('<img src=' + currentFeature.properties.img + '>' +
                  '<h1 class="popup-title">' + currentFeature.properties.name + '</h1>' +
                  '<h3 class="popup-desc"><i>' + currentFeature.properties.address + '</i></h3>')
         .addTo(map);

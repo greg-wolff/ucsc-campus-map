@@ -121,7 +121,7 @@ a:hover {
 
 .listings .item .title {
   display: block;
-  color: #00853e;
+  color: #222222;
   font-weight: 700;
 }
 
@@ -130,7 +130,7 @@ a:hover {
 }
 
 .listings .item.active .title {
-  color: #8cc63f;
+  color: #575757;
 }
 
 .listings .item.active,
