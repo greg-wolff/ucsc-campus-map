@@ -580,7 +580,8 @@
       keys: ['properties.name', 'properties.code']
     };
     var fuse = new Fuse(features, options);
-    var search = document.getElementByClassName("searchTextbox");
+    var search = document.getElementsByClassName("searchTextbox")[0];
+    var closex = document.getElementsByClassName("close-svg")[0];
     search.addEventListener("focus", ()=> {
       if(!search.value) {
         map.flyTo({
@@ -598,8 +599,8 @@
       //console.log(results);
       if(!search.value) {
         buildLocationList(buildings);
-        search.classList.remove('close');
-      } else search.classList.add('close');
+        closex.style.display = 'none';
+      } else { closex.style.display = 'block'; console.log(closex);}
       buildLocationList({features: results});
       search.onkeypress = (e) => {
         var event = e || window.event;
@@ -613,6 +614,10 @@
           document.getElementById('listing-0').classList.add('active');
         }
       }
+    });
+    closex.addEventListener("click", ()=>{
+      search.value = "";
+      closex.style.display = 'none';
     });
 
     function removeList() {
