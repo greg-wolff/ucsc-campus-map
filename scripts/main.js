@@ -18,6 +18,7 @@
             "properties": {
               "img": "img/jbaskin.jpg",
               "name": "Jack Baskin Engineering",
+              "code": "BE",
               "website": "https://www.soe.ucsc.edu/",
               "address": "1156 High St"
             },
@@ -559,10 +560,7 @@
         var clickedPoint = features[0];
         gotoBuilding(clickedPoint);
         popUp(clickedPoint);
-        var activeItem = document.getElementsByClassName('active');
-        if (activeItem[0]) {
-          activeItem[0].classList.remove('active');
-        }
+        removeActive();
         var selectedFeature = clickedPoint.properties.name;
         for (var i = 0; i < buildings.features.length; i++)
           if (buildings.features[i].properties.name === selectedFeature)
@@ -571,8 +569,66 @@
         listing.classList.add('active');
       }
     });
+    var features = buildings.features;
+    var options = {
+      shouldSort: true,
+      threshold: 0.6,
+      location: 0,
+      distance: 100,
+      maxPatternLength: 64,
+      minMatchCharLength: 1,
+      keys: ['properties.name', 'properties.code']
+    };
+    var fuse = new Fuse(features, options);
+    var search = document.getElementByClassName("searchTextbox");
+    search.addEventListener("focus", ()=> {
+      if(!search.value) {
+        map.flyTo({
+          center: [-122.06, 36.989],
+          zoom: 14
+        });
+        var popUps = document.getElementsByClassName('mapboxgl-popup');
+        if (popUps[0]) popUps[0].remove();
+        removeActive();
+      }
+    });
+    search.addEventListener("input", ()=>{
+      var results = fuse.search(search.value);
+      removeList();
+      //console.log(results);
+      if(!search.value) {
+        buildLocationList(buildings);
+        search.classList.remove('close');
+      } else search.classList.add('close');
+      buildLocationList({features: results});
+      search.onkeypress = (e) => {
+        var event = e || window.event;
+        var charCode = event.which || event.keyCode;
+
+        if ( charCode == '13' ) {
+          gotoBuilding(results[0]);
+          popUp(results[0]);
+          removeActive();
+          console.log(document.getElementById('listings').innerHTML);
+          document.getElementById('listing-0').classList.add('active');
+        }
+      }
+    });
+
+    function removeList() {
+      var listings = document.getElementById('listings');
+      while (listings.firstChild) listings.removeChild(listings.firstChild);
+    }
+
+    function removeActive() {
+      var activeItem = document.getElementsByClassName('active');
+      if (activeItem[0]) {
+        activeItem[0].classList.remove('active');
+      }
+    }
 
     function buildLocationList(data) {
+
       for(i = 0; i < data.features.length; i++) {
         var currentFeature = data.features[i];
         var prop = currentFeature.properties;
@@ -597,10 +653,8 @@
           var clickedListing = data.features[this.dataPosition];
           gotoBuilding(clickedListing);
           popUp(clickedListing);
-          var activeItem = document.getElementsByClassName('active');
-          if (activeItem[0]) {
-            activeItem[0].classList.remove('active');
-          } this.classList.add('active');
+          removeActive();
+          this.classList.add('active');
         });
       }
     }
@@ -632,6 +686,6 @@
                  '<h3 class="popup-desc"><i>' + currentFeature.properties.address + '</i></h3>')
         .addTo(map);
       popup.on("close", function(e) {
-          document.getElementsByClassName('active')[0].classList.remove('active');
+          removeActive();
       });
     }
