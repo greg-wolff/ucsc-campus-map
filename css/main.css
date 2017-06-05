@@ -63,10 +63,16 @@ a:hover {
     border-radius: 0; }
   .mapboxgl-popup-content .popup-title {
     text-align: center;
-    padding: 20px 10px 0 10px; }
+    padding: 20px 10px 0; }
   .mapboxgl-popup-content .popup-desc {
-    text-align: center;
-    padding-bottom: 20px; }
+    text-align: center; }
+  .mapboxgl-popup-content .popup-links {
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .mapboxgl-popup-content .popup-link {
+    display: inline;
+    padding: 15px 30px; }
 
 .mapboxgl-popup-close-button {
   right: 11px;
@@ -101,7 +107,7 @@ a:hover {
   display: none;
   position: absolute;
   right: -2px;
-  top: 0px;
+  top: 0;
   padding: 16px;
   width: 45px;
   cursor: pointer; }
@@ -150,7 +156,8 @@ input:-ms-input-placeholder {
       font-weight: 400; }
   .listings .item.active .title {
     color: #777777; }
-  .listings .item.active, .listings .item:hover {
+  .listings .item.active,
+  .listings .item:hover {
     background-color: #f8f8f8; }
 
 ::-webkit-scrollbar {
