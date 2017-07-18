@@ -158,6 +158,7 @@ var buildings = {
         "img": "img/physsci.jpg",
         "name": "Physical Sciences",
         "website": "http://pbsci.ucsc.edu/",
+        "address": "Santa Cruz, CA 95064"
       },
       "geometry": {
         "coordinates": [
